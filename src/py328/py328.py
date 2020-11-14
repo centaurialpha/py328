@@ -14,22 +14,16 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with PY328; If not, see <http://www.gnu.org/licenses/>.
-import time
 import warnings
 
 import serial
 import serial.tools.list_ports
 
 from py328.constants import (
-    DIGITAL_PIN_COUNT,
-    ANALOG_PIN_COUNT,
     SYSEX_START,
     SYSEX_END,
     SET_PIN_MODE,
     SET_DIGITAL_PIN_VALUE,
-    REPORT_FIRMWARE,
-    PinMode,
-    PinValue,
     UNAVAILABLE_DIGITAL_PINS,
 )
 
@@ -89,14 +83,22 @@ class Arduino:
     def __init__(self, port, baud_rate=57600):
         self._serial_port = None
         self.baud_rate = baud_rate
+        self.port = port
 
-        try:
-            self._find_arduino()
-        except IOError as reason:
-            print('> Error while find arduino device')
-            print(f'    {reason}')
+        if port is None:
+            try:
+                self._find_arduino()
+            except IOError as reason:
+                print('> Error while find arduino device')
+                print(f'    {reason}')
+        else:
+            self._connect_arduino()
+
         if self._serial_port is not None:
             print(f'> Arduino device compatible connected on {self._serial_port.name}')
+
+    def _connect_arduino(self):
+        print('> Trying to')
 
     def _find_arduino(self):
         ports = serial.tools.list_ports.comports()

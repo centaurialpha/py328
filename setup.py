@@ -15,9 +15,6 @@ setup(
         'pyserial',
     ],
     extras_require={
-        'testing': [
-            'pytest',
-        ],
         'dev': [
             'ipython',
         ]

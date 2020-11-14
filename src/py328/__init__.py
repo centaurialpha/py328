@@ -3,8 +3,6 @@ from py328.py328 import (
 )
 from py328.constants import (
     PinMode,
-    PinValue
-
 )
 
 __all__ = [

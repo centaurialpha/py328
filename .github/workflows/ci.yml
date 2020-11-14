@@ -1,0 +1,35 @@
+name: Run Python Tests
+
+on: [push]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Setup Python Environment
+        uses: actions/setup-python@v2
+      - name: Install requirements
+        run: pip install --quiet tox
+      - name: Lint Code
+        run: |
+          tox -e pep8 -e lint
+  test:
+    needs: [lint]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.7, 3.8, 3.9]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install requirements
+        run: |
+          pip install tox tox-gh-actions
+      - name: Unittest
+        run: |
+          tox
