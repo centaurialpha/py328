@@ -80,10 +80,9 @@ __version__ = '0.1'
 class Arduino:
     WAIT_TO_INIT_BOARD = 4
 
-    def __init__(self, port, baud_rate=57600):
-        self._serial_port = None
+    def __init__(self, port=None, baud_rate=57600):
+        self.serial_port = port
         self.baud_rate = baud_rate
-        self.port = port
 
         if port is None:
             try:
@@ -94,11 +93,11 @@ class Arduino:
         else:
             self._connect_arduino()
 
-        if self._serial_port is not None:
-            print(f'> Arduino device compatible connected on {self._serial_port.name}')
+        if self.serial_port is not None:
+            print(f'> Arduino device compatible connected on {self.serial_port.name}')
 
     def _connect_arduino(self):
-        print('> Trying to')
+        pass
 
     def _find_arduino(self):
         ports = serial.tools.list_ports.comports()
@@ -113,7 +112,7 @@ class Arduino:
             warnings.warn('More than one Arduino connected, will be use first')
         candidate_port = candidate_ports[0]
 
-        self._serial_port = serial.Serial(candidate_port.device, baudrate=self.baud_rate)
+        self.serial_port = serial.Serial(candidate_port.device, baudrate=self.baud_rate)
 
     def _send_sysex(self, command):
         # Prepare sysex command
@@ -127,11 +126,11 @@ class Arduino:
     def send_command(self, command):
         if isinstance(command, tuple):
             command = bytes(command)
-        self._serial_port.write(command)
+        self.serial_port.write(command)
 
     def going_down(self):
-        if self._serial_port is not None:
-            self._serial_port.close()
+        if self.serial_port is not None:
+            self.serial_port.close()
 
     def __del__(self):
         self.going_down()
