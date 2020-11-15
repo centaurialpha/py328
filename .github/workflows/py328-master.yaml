@@ -13,7 +13,7 @@ jobs:
         run: pip install --quiet tox
       - name: Lint Code
         run: |
-          tox -e pep8 -e lint
+          tox -e pep8
   test:
     needs: [lint]
     runs-on: ubuntu-latest
