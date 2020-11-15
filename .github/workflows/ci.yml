@@ -1,4 +1,4 @@
-name: Run Python Tests
+name: py328-master
 
 on: [push]
 
